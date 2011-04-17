@@ -7,5 +7,3 @@ Uses include:
 * Uh... that's all I can think of so far. Maybe you have some ideas.
 
 See [the wiki](https://github.com/dhemery/slicer/wiki) for further information.
-
-[[the wiki|Home]]
