@@ -16,12 +16,12 @@ import com.dhemery.excelrowiterator.util.WorkbookCreator;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-public class RowCountTests extends ExcelTest {
+public class ParameterTypeTests extends ExcelTest {
 	private final Object[][] cellValues = new Object[][] {
-			{"a1"},
-			{"a2"},
-			{"a3"},
-			{"a4"}
+			{true, 1.1, 1, "a1", },
+			{false, 2.2, 2, "a2", },
+			{true, 3.3, 3, "a3", },
+			{false, 4.4, 4, "a4", },
 	};
 	private String excelFileName;
 
@@ -36,12 +36,17 @@ public class RowCountTests extends ExcelTest {
 	}
 
 	@Test(dataProvider="rows")
-	public void aParameterizedTest(String columnA) {
+	public void suppliesPrimitiveParameterTypes(boolean column1, double column2, int column3) {
+		assertThat(column1, is(cellValues[row()][0]));
+		assertThat(column2, is(cellValues[row()][1]));
+		assertThat(column3, is(cellValues[row()][2]));
 	}
 
-	@Test(dependsOnMethods = { "aParameterizedTest" })
-	public void suppliesEveryRowToParameterizedTest() throws SecurityException, NoSuchMethodException {
-		Method method = getClass().getMethod("aParameterizedTest", String.class);
-		assertThat(invocationCount(method), is(cellValues.length));
+	@Test(dataProvider="rows")
+	public void suppliesCommonClassParameterTypes(Boolean column1, Double column2, Integer column3, String column4) {
+		assertThat(column1, is(cellValues[row()][0]));
+		assertThat(column2, is(cellValues[row()][1]));
+		assertThat(column3, is(cellValues[row()][2]));
+		assertThat(column4, is(cellValues[row()][3]));
 	}
 }

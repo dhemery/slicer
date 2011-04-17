@@ -42,7 +42,19 @@ public class WorkbookCreator {
 	private static void populateRow(Row row, Object[] cellValues) {
 		for(int columnNumber = 0 ; columnNumber < cellValues.length ; columnNumber++) {
 			Cell cell = row.createCell(columnNumber);
-			cell.setCellValue((String) cellValues[columnNumber]);
+			Object value = cellValues[columnNumber];
+			if(Boolean.class.isAssignableFrom(value.getClass())) {
+				cell.setCellValue((Boolean) value);
+			}
+			if(String.class.isAssignableFrom(value.getClass())) {
+				cell.setCellValue((String) value);
+			}
+			if(Integer.class.isAssignableFrom(value.getClass())) {
+				cell.setCellValue((double)(Integer)value);
+			}
+			if(Double.class.isAssignableFrom(value.getClass())) {
+				cell.setCellValue((Double) value);
+			}
 		}
 	}
 

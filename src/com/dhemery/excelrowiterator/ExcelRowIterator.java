@@ -16,14 +16,14 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class ExcelRowIterator implements Iterator<Object[]> {
 	private int rowNumber;
-	private final int parameterCount;
 	private Sheet sheet;
 	private int numberOfRows;
+	private final Class<?>[] parameterTypes;
 
 	public ExcelRowIterator(String excelFileName, Method method) throws FileNotFoundException, IOException {
 		sheet = getSheet(excelFileName);
 		numberOfRows = numberOfRowsIn(sheet);
-		parameterCount = method.getParameterTypes().length;
+		parameterTypes = method.getParameterTypes();
 		rowNumber = 0;
 	}
 
@@ -46,15 +46,40 @@ public class ExcelRowIterator implements Iterator<Object[]> {
 
 	@Override
 	public Object[] next() {
-		List<String> parameterValues = new ArrayList<String>();
-		for(int columnNumber = 0 ; columnNumber < parameterCount ; columnNumber++) {
-			Row row = sheet.getRow(rowNumber);
-			Cell cell = row.getCell(columnNumber);
-			String value = cell.getStringCellValue();
-			parameterValues.add(value);
+		List<Object> parameterValues = new ArrayList<Object>();
+		for(int columnNumber = 0 ; columnNumber < parameterTypes.length ; columnNumber++) {
+			parameterValues.add(getValue(rowNumber, columnNumber));
 		}
 		rowNumber++;
 		return parameterValues.toArray(new Object[0]);
+	}
+
+	private Object getValue(int rowNumber, int columnNumber) {
+		Row row = sheet.getRow(rowNumber);
+		Cell cell = row.getCell(columnNumber);
+		Class<?> parameterType = parameterTypes[columnNumber];
+		if(parameterType.isAssignableFrom(boolean.class)) {
+			return cell.getBooleanCellValue();
+		}
+		if(parameterType.isAssignableFrom(Boolean.class)) {
+			return cell.getBooleanCellValue();
+		}
+		if(parameterType.isAssignableFrom(double.class)) {
+			return cell.getNumericCellValue();
+		}
+		if(parameterType.isAssignableFrom(Double.class)) {
+			return cell.getNumericCellValue();
+		}
+		if(parameterType.isAssignableFrom(int.class)) {
+			return (int) cell.getNumericCellValue();
+		}
+		if(parameterType.isAssignableFrom(Integer.class)) {
+			return (int) cell.getNumericCellValue();
+		}
+		if(parameterType.isAssignableFrom(String.class)) {
+			return cell.getStringCellValue();
+		}
+		return null;
 	}
 
 	@Override

@@ -10,24 +10,23 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.dhemery.excelrowiterator.ExcelRowIterator;
-import com.dhemery.excelrowiterator.util.InvocationCounter;
+import com.dhemery.excelrowiterator.util.ExcelTest;
 import com.dhemery.excelrowiterator.util.WorkbookCreator;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-public class ParameterCountTests {
+public class ParameterCountTests extends ExcelTest {
 	private final Object[][] cellValues = new Object[][] {
 			{"a1", "b1", "c1", "d1", "e1", "f1", "g1" },
 			{"a2", "b2", "c2", "d2", "e2", "f2", "g2" },
 			{"a3", "b3", "c3", "d3", "e3", "f3", "g3" },
 			{"a4", "b4", "c4", "d4", "e4", "f4", "g4" },
 	};
-	private final InvocationCounter counter = new InvocationCounter();
 	private String excelFileName;
-
+	
 	@BeforeClass
-	public void createExcelFile() throws IOException {
+	public void createWorkbookFile() throws FileNotFoundException, IOException {
 		excelFileName = WorkbookCreator.createWorkbookFile(cellValues);
 	}
 
@@ -38,34 +37,23 @@ public class ParameterCountTests {
 
 	@Test(dataProvider="rows")
 	public void suppliesOneParameter(String columnA) {
-		counter.increment("feeds one parameter");
-		int row = counter.count("feeds one parameter");
-		String expectedColumnA = expected("a", row);
-		assertThat(columnA, is(expectedColumnA));
+		assertThat(columnA, is(cellValues[row()][0]));
 	}
 
 	@Test(dataProvider="rows")
 	public void suppliesTwoParameters(String columnA, String columnB) {
-		counter.increment("feeds two parameters");
-		int row = counter.count("feeds two parameters");
-		assertThat(columnA, is(expected("a", row)));
-		assertThat(columnB, is(expected("b", row)));
+		assertThat(columnA, is(cellValues[row()][0]));
+		assertThat(columnB, is(cellValues[row()][1]));
 	}
 
 	@Test(dataProvider="rows")
 	public void suppliesManyParameters(String columnA, String columnB, String columnC, String columnD, String columnE, String columnF, String columnG) {
-		counter.increment("feeds many parameters");
-		int row = counter.count("feeds many parameters");
-		assertThat(columnA, is(expected("a", row)));
-		assertThat(columnB, is(expected("b", row)));
-		assertThat(columnC, is(expected("c", row)));
-		assertThat(columnD, is(expected("d", row)));
-		assertThat(columnE, is(expected("e", row)));
-		assertThat(columnF, is(expected("f", row)));
-		assertThat(columnG, is(expected("g", row)));
-	}
-
-	private String expected(String column, int row) {
-		return String.format("%s%d", column, row);
+		assertThat(columnA, is(cellValues[row()][0]));
+		assertThat(columnB, is(cellValues[row()][1]));
+		assertThat(columnC, is(cellValues[row()][2]));
+		assertThat(columnD, is(cellValues[row()][3]));
+		assertThat(columnE, is(cellValues[row()][4]));
+		assertThat(columnF, is(cellValues[row()][5]));
+		assertThat(columnG, is(cellValues[row()][6]));
 	}
 }
