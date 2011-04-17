@@ -1,5 +1,10 @@
-# slicer-ng
-slicer-ng is a TestNG DataProvider that slices and serves rows and columns from Excel spreadsheets.
+# Slicer
+Slicer is a Java DSL for building iterators that slice and serve rows and columns from Excel spreadsheets.
+
+Uses include:
+
+* Creating DataProviders that yield values for parameterized tests in TestNG.
+* Uh... that's all I can think of so far. Maybe you have some ideas.
 
 ## Usage
 
