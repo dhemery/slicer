@@ -28,14 +28,22 @@ public class WorkbookCreator {
 	private static Workbook createWorkbook(Object[][] cellValues) {
 		Workbook workbook = new HSSFWorkbook();
 		Sheet sheet = workbook.createSheet();
+		populateSheet(sheet, cellValues);
+		return workbook;
+	}
+
+	private static void populateSheet(Sheet sheet, Object[][] cellValues) {
 		for(int rowNumber = 0 ; rowNumber < cellValues.length ; rowNumber++) {
 			Row row = sheet.createRow(rowNumber);
-			for(int columnNumber = 0 ; columnNumber < cellValues[0].length ; columnNumber++) {
-				Cell cell = row.createCell(columnNumber);
-				cell.setCellValue((String) cellValues[rowNumber][columnNumber]);
-			}
+			populateRow(row, cellValues[rowNumber]);
 		}
-		return workbook;
+	}
+
+	private static void populateRow(Row row, Object[] cellValues) {
+		for(int columnNumber = 0 ; columnNumber < cellValues.length ; columnNumber++) {
+			Cell cell = row.createCell(columnNumber);
+			cell.setCellValue((String) cellValues[columnNumber]);
+		}
 	}
 
 	private static void write(Workbook workbook, File file) throws IOException, FileNotFoundException {

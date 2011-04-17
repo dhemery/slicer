@@ -14,7 +14,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-
 public class ExcelRowIterator implements Iterator<Object[]> {
 	private int rowNumber;
 	private final int parameterCount;

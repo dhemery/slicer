@@ -16,7 +16,7 @@ import com.dhemery.excelrowiterator.util.WorkbookCreator;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-public class ExcelRowIteratorTests {
+public class ParameterCountTests {
 	private final Object[][] cellValues = new Object[][] {
 			{"a1", "b1", "c1", "d1", "e1", "f1", "g1" },
 			{"a2", "b2", "c2", "d2", "e2", "f2", "g2" },
@@ -37,21 +37,21 @@ public class ExcelRowIteratorTests {
 	}
 
 	@Test(dataProvider="rows")
-	public void feedsOneString(String parameter) {
+	public void suppliesOneParameter(String columnA) {
 		int row = counter.count("feeds one string");
-		String expectedParameter = expected("a", row);
-		assertThat(parameter, is(expectedParameter));
+		String expectedColumnA = expected("a", row);
+		assertThat(columnA, is(expectedColumnA));
 	}
 
 	@Test(dataProvider="rows")
-	public void feedsTwoStrings(String columnA, String columnB) {
+	public void suppliesTwoParameters(String columnA, String columnB) {
 		int row = counter.count("feeds two strings");
 		assertThat(columnA, is(expected("a", row)));
 		assertThat(columnB, is(expected("b", row)));
 	}
 
 	@Test(dataProvider="rows")
-	public void feedsManyStrings(String columnA, String columnB, String columnC, String columnD, String columnE, String columnF, String columnG) {
+	public void suppliesManyParameters(String columnA, String columnB, String columnC, String columnD, String columnE, String columnF, String columnG) {
 		int row = counter.count("feeds many strings");
 		assertThat(columnA, is(expected("a", row)));
 		assertThat(columnB, is(expected("b", row)));
