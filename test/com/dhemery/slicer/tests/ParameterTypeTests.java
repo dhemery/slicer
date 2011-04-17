@@ -1,4 +1,4 @@
-package com.dhemery.excelrowiterator.tests;
+package com.dhemery.slicer.tests;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,14 +9,14 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.dhemery.excelrowiterator.ExcelRowIterator;
-import com.dhemery.excelrowiterator.util.ExcelTest;
-import com.dhemery.excelrowiterator.util.WorkbookCreator;
+import com.dhemery.slicer.util.SpreadsheetSlicerTest;
+import com.dhemery.slicer.util.WorkbookCreator;
 
+import static com.dhemery.slicer.SpreadsheetSlicer.slice;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-public class ParameterTypeTests extends ExcelTest {
+public class ParameterTypeTests extends SpreadsheetSlicerTest {
 	private final Object[][] cellValues = new Object[][] {
 			{true, 1.1, 1, "a1", },
 			{false, 2.2, 2, "a2", },
@@ -32,7 +32,7 @@ public class ParameterTypeTests extends ExcelTest {
 
 	@DataProvider
 	public Iterator<Object[]> rows(Method method) throws FileNotFoundException, IOException {
-		return new ExcelRowIterator(excelFileName, method);
+		return slice(excelFileName).method(method).iterator();
 	}
 
 	@Test(dataProvider="rows")

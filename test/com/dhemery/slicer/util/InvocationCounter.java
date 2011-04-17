@@ -1,4 +1,4 @@
-package com.dhemery.excelrowiterator.util;
+package com.dhemery.slicer.util;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;

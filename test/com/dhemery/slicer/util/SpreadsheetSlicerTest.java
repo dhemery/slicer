@@ -1,4 +1,4 @@
-package com.dhemery.excelrowiterator.util;
+package com.dhemery.slicer.util;
 
 import java.lang.reflect.Method;
 
@@ -6,7 +6,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 
-public class ExcelTest {
+public class SpreadsheetSlicerTest {
 	private final InvocationCounter counter = new InvocationCounter();
 	private int currentRow;
 

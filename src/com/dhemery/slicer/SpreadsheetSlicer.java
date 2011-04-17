@@ -1,36 +1,35 @@
-package com.dhemery.excelrowiterator;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.Method;
+package com.dhemery.slicer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class ExcelRowIterator implements Iterator<Object[]> {
+public class SpreadsheetSlicer implements Iterator<Object[]> {
 	public interface CellValueConverter {
 		Object valueOf(Cell cell);
 	}
 	private int rowNumber;
 	private Sheet sheet;
 	private int numberOfRows;
-	private final Class<?>[] parameterTypes;
+	private final List<Class<?>> types;
 	private final Map<Class<?>,CellValueConverter> convertersByType = new HashMap<Class<?>,CellValueConverter>();
 
-	public ExcelRowIterator(String excelFileName, Method method) throws FileNotFoundException, IOException {
-		sheet = getSheet(excelFileName);
+	public SpreadsheetSlicer(Sheet sheet, List<Class<?>> types) {
+		this.sheet = sheet;
 		numberOfRows = numberOfRowsIn(sheet);
-		parameterTypes = method.getParameterTypes();
+		this.types = types;
 		rowNumber = 0;
 		createConverters();
+	}
+
+	public static SpreadsheetSlicerBuilder slice(String fileName) {
+		return new SpreadsheetSlicerBuilder(fileName);
 	}
 
 	private void createConverters() {
@@ -70,12 +69,6 @@ public class ExcelRowIterator implements Iterator<Object[]> {
 		convertersByType.put(String.class, stringConverter);
 	}
 
-	private Sheet getSheet(String excelFileName) throws FileNotFoundException, IOException {
-		FileInputStream fileInputStream = new FileInputStream(excelFileName);
-		HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream);
-		return workbook.getSheetAt(0);
-	}
-
 	@Override
 	public boolean hasNext() {
 		return rowNumber < numberOfRows;
@@ -84,7 +77,7 @@ public class ExcelRowIterator implements Iterator<Object[]> {
 	@Override
 	public Object[] next() {
 		List<Object> parameterValues = new ArrayList<Object>();
-		for(int columnNumber = 0 ; columnNumber < parameterTypes.length ; columnNumber++) {
+		for(int columnNumber = 0 ; columnNumber < types.size() ; columnNumber++) {
 			parameterValues.add(valueOfCell(columnNumber));
 		}
 		rowNumber++;
@@ -104,7 +97,7 @@ public class ExcelRowIterator implements Iterator<Object[]> {
 	
 	private Object valueOfCell(int columnNumber) {
 		Cell cell = sheet.getRow(rowNumber).getCell(columnNumber);
-		Class<?> type = parameterTypes[columnNumber];
+		Class<?> type = types.get(columnNumber);
 		return convertersByType.get(type).valueOf(cell);
 	}
-	}
+}

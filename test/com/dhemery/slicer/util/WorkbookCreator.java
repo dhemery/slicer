@@ -1,4 +1,4 @@
-package com.dhemery.excelrowiterator.util;
+package com.dhemery.slicer.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
