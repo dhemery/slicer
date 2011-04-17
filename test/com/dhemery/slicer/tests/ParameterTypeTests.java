@@ -12,7 +12,8 @@ import org.testng.annotations.Test;
 import com.dhemery.slicer.util.SpreadsheetSlicerTest;
 import com.dhemery.slicer.util.WorkbookCreator;
 
-import static com.dhemery.slicer.SpreadsheetSlicer.slice;
+import static com.dhemery.slicer.Slicer.slice;
+
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 

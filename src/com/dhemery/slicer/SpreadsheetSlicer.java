@@ -28,10 +28,6 @@ public class SpreadsheetSlicer implements Iterator<Object[]> {
 		createConverters();
 	}
 
-	public static SpreadsheetSlicerBuilder slice(String fileName) {
-		return new SpreadsheetSlicerBuilder(fileName);
-	}
-
 	private void createConverters() {
 		CellValueConverter booleanConverter = new CellValueConverter() {
 			@Override
