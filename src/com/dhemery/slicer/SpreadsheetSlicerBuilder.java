@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -13,7 +12,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class SpreadsheetSlicerBuilder {
 	private final String fileName;
-	private List<Class<?>> types;
 
 	public SpreadsheetSlicerBuilder(String fileName) {
 		this.fileName = fileName;
@@ -28,13 +26,7 @@ public class SpreadsheetSlicerBuilder {
 		return new HSSFWorkbook(fileInputStream);
 	}
 
-	public SpreadsheetSlicer iterator() throws FileNotFoundException, IOException {
-		Sheet sheet = getSheet();
-		return new SpreadsheetSlicer(sheet, types);
-	}
-
-	public SpreadsheetSlicerBuilder method(Method method) {
-		types = Arrays.asList(method.getParameterTypes());
-		return this;
+	public SpreadsheetSlicer asParametersFor(Method method) throws FileNotFoundException, IOException {
+		return new SpreadsheetSlicer(getSheet(), Arrays.asList(method.getParameterTypes()));
 	}
 }

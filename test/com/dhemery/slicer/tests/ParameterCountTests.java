@@ -33,7 +33,7 @@ public class ParameterCountTests extends SpreadsheetSlicerTest {
 
 	@DataProvider
 	public Iterator<Object[]> rows(Method method) throws FileNotFoundException, IOException {
-		return slice(excelFileName).method(method).iterator();
+		return slice(excelFileName).asParametersFor(method);
 	}
 
 	@Test(dataProvider="rows")
