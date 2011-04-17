@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/poi-3.8-beta2-20110408.jar"/>
-	<classpathentry kind="lib" path="lib/testng-6.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-3.8-beta2-20110408.jar"/>
+	<classpathentry kind="lib" path="lib/testng/testng-6.0.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
