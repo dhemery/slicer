@@ -38,21 +38,24 @@ public class ParameterCountTests {
 
 	@Test(dataProvider="rows")
 	public void suppliesOneParameter(String columnA) {
-		int row = counter.count("feeds one string");
+		counter.increment("feeds one parameter");
+		int row = counter.count("feeds one parameter");
 		String expectedColumnA = expected("a", row);
 		assertThat(columnA, is(expectedColumnA));
 	}
 
 	@Test(dataProvider="rows")
 	public void suppliesTwoParameters(String columnA, String columnB) {
-		int row = counter.count("feeds two strings");
+		counter.increment("feeds two parameters");
+		int row = counter.count("feeds two parameters");
 		assertThat(columnA, is(expected("a", row)));
 		assertThat(columnB, is(expected("b", row)));
 	}
 
 	@Test(dataProvider="rows")
 	public void suppliesManyParameters(String columnA, String columnB, String columnC, String columnD, String columnE, String columnF, String columnG) {
-		int row = counter.count("feeds many strings");
+		counter.increment("feeds many parameters");
+		int row = counter.count("feeds many parameters");
 		assertThat(columnA, is(expected("a", row)));
 		assertThat(columnB, is(expected("b", row)));
 		assertThat(columnC, is(expected("c", row)));

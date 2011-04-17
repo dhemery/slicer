@@ -7,15 +7,16 @@ public class InvocationCounter {
 	private Map<String, Integer> invocationCountByName = new HashMap<String,Integer>();
 	
 	public int count(String name) {
-		ensureInvocationCountExistsFor(name);
-		incrementInvocationCountFor(name);
 		return invocationCountByName.get(name);
 	}
 
+	public void increment(String name) {
+		ensureInvocationCountExistsFor(name);
+		incrementInvocationCountFor(name);
+	}
+
 	private void incrementInvocationCountFor(String name) {
-		int invocationCount = invocationCountByName.get(name);
-		invocationCount++;
-		invocationCountByName.put(name, invocationCount);
+		invocationCountByName.put(name, count(name) + 1);
 	}
 
 	private void ensureInvocationCountExistsFor(String name) {

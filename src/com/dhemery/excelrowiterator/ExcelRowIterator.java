@@ -35,7 +35,7 @@ public class ExcelRowIterator implements Iterator<Object[]> {
 
 	private int numberOfRowsIn(Sheet sheet) {
 		int lastRowNum = sheet.getLastRowNum();
-		if(lastRowNum > 0) return lastRowNum;
+		if(lastRowNum > 0) return lastRowNum + 1;
 		return sheet.getPhysicalNumberOfRows();
 	}
 
