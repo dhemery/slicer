@@ -1,7 +1,6 @@
 package com.dhemery.slicer;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,10 +12,10 @@ public class SlicerBuilder {
 	}
 
 	public Iterator<List<Object>> asParametersFor(Method method) {
-		return new MethodParameterSlicer<Object>(grid, Arrays.asList(method.getParameterTypes()));
+		return new GridSlicer<Object>(grid, new MethodParameterTypeMap(method));
 	}
 
 	public Iterator<List<String>> asStrings() {
-		return new StringSlicer(grid);
+		return new GridSlicer<String>(grid, new StringTypeMap());
 	}
 }

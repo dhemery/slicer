@@ -1,6 +1,5 @@
 package com.dhemery.slicer;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ public class Slicer {
 		return new SlicerBuilder(gridFromCsvFile(fileName));
 	}
 
-	private static Grid gridFromCsvFile(String fileName) throws FileNotFoundException, IOException {
+	private static Grid gridFromCsvFile(String fileName) throws IOException {
 		CSVReader reader = new CSVReader(new FileReader(fileName));
 		ArrayList<List<String>> cells = new ArrayList<List<String>>();
 		String[] row;
