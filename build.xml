@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="all">
+	<propertyfile file="build.number" />
+	<property name="bin-dir" location="bin" />
+	<property name="dist-dir" location="dist" />
+	<property name="lib-dir" location="lib" />
+	<property name="src-dir" location="src" />
+	<property name="test-src" location="" />
+	<property name="test-bin-dir" location="" />
+	<property name="opencsv-lib" location="${lib-dir}/opencsv-2.3.jar" />
+	
+	<target name="all" depends="test" />
+
+	<target name="clean">
+		<delete dir="${bin-dir}" quiet="true" />
+		<delete dir="${dist-dir}" quiet="true" />
+	</target>
+	
+	<target name="compile">
+		<javac srcdir="${src-dir}" destdir="${bin-dir}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<pathelement location="${opencsv-lib}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="init">
+		<tstamp />
+	</target>
+
+	<target name="jar" depends="compile">
+		<delete dir="${dist-dir}" />
+		<mkdir dir="${dist-dir}" />
+		<buildnumber/>
+		<property name="version" value="0.1.${build.number}" />
+		<unjar src="${opencsv-lib}" dest="${bin-dir}" />
+	    <jar destfile="${dist-dir}/slicer.${version}.jar"
+	         basedir="${bin-dir}"
+	         includes="**/*.class"
+	         />
+	</target>
+
+	<target name="test" depends="compile" />
+</project>

@@ -1,4 +1,4 @@
-package com.dhemery.slicer.util;
+package com.dhemery.slicer.test.util;
 
 import java.io.File;
 import java.io.FileWriter;
