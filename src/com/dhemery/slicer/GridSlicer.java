@@ -1,5 +1,4 @@
 package com.dhemery.slicer;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,21 +21,11 @@ public class GridSlicer <T> implements Iterator<List<T>> {
 
 	@Override
 	public List<T> next() {
-		List<T> parameterValues = new ArrayList<T>();
-		for(int columnNumber = 0 ; columnNumber < typeMap.numberOfCellsForRow(grid.row(rowNumber)) ; columnNumber++) {
-			String textValue = grid.row(rowNumber).get(columnNumber);
-			parameterValues.add(valueOfCell(textValue, columnNumber));
-		}
-		rowNumber++;
-		return parameterValues;
+		return typeMap.convertRow(grid.row(rowNumber++));
 	}
 
 	@Override
 	public void remove() {
 		throw new NotImplementedException();
-	}
-	
-	private T valueOfCell(String textValue, int columnNumber) {
-		return typeMap.convert(textValue, columnNumber);
 	}
 }

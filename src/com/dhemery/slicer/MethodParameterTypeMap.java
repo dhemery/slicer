@@ -1,33 +1,35 @@
 package com.dhemery.slicer;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MethodParameterTypeMap implements TypeMap<Object> {
-	private final Class<?>[] types;
+	private final Class<?>[] typesByColumn;
 	private final Map<Class<?>,ValueConverter> convertersByType = createConverters();
 
 	public MethodParameterTypeMap(Method method) {
-		types = method.getParameterTypes();
-	}
-
-	@Override
-	public int numberOfCellsForRow(List<String> row) {
-		return types.length;
-	}
-
-	public Class<?> getTypeForColumn(int columnNumber) {
-		return types[columnNumber];
-	}
-
-	@Override
-	public Object convert(String textValue, int columnNumber) {
-		Class<?> type = getTypeForColumn(columnNumber);
-		return convertersByType.get(type).valueOf(textValue);
+		typesByColumn = method.getParameterTypes();
 	}
 	
+	@Override
+	public List<Object> convertRow(List<String> row) {
+		List<Object> parameterValues = new ArrayList<Object>();
+		for(int columnNumber = 0 ; columnNumber < typesByColumn.length ; columnNumber++) {
+			String textValue = row.get(columnNumber);
+			Object convertedValue = convertValue(textValue, columnNumber);
+			parameterValues.add(convertedValue);
+		}
+		return parameterValues;
+	}
+
+	public Object convertValue(String textValue, int columnNumber) {
+		Class<?> type = typesByColumn[columnNumber];
+		return convertersByType.get(type).valueOf(textValue);
+	}
+
 	public interface ValueConverter {
 		Object valueOf(String cell);
 	}
@@ -70,5 +72,4 @@ public class MethodParameterTypeMap implements TypeMap<Object> {
 		converters.put(String.class, stringConverter);
 		return converters;
 	}
-
 }

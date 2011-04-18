@@ -16,5 +16,4 @@ public class Grid {
 	public List<String> row(int i) {
 		return cells.get(i);
 	}
-
 }
