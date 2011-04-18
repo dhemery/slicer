@@ -1,4 +1,4 @@
-package com.dhemery.slicer;
+package com.dhemery.slicer.internal;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -6,23 +6,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MethodParameterTypeMap implements TypeMap<Object> {
+public class MethodParameterConverter implements RowConverter<Object[]> {
 	private final Class<?>[] typesByColumn;
 	private final Map<Class<?>,ValueConverter> convertersByType = createConverters();
 
-	public MethodParameterTypeMap(Method method) {
+	public MethodParameterConverter(Method method) {
 		typesByColumn = method.getParameterTypes();
 	}
 	
 	@Override
-	public List<Object> convertRow(List<String> row) {
+	public Object[] convertRow(List<String> row) {
 		List<Object> parameterValues = new ArrayList<Object>();
 		for(int columnNumber = 0 ; columnNumber < typesByColumn.length ; columnNumber++) {
 			String textValue = row.get(columnNumber);
 			Object convertedValue = convertValue(textValue, columnNumber);
 			parameterValues.add(convertedValue);
 		}
-		return parameterValues;
+		return parameterValues.toArray(new Object[0]);
 	}
 
 	public Object convertValue(String textValue, int columnNumber) {

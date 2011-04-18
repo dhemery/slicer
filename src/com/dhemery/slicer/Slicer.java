@@ -1,25 +1,42 @@
 package com.dhemery.slicer;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Iterator;
 
-import au.com.bytecode.opencsv.CSVReader;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class Slicer {
-	public static SlicerBuilder slice(String fileName) throws IOException {
-		return new SlicerBuilder(gridFromCsvFile(fileName));
+import com.dhemery.slicer.internal.RowConverter;
+
+public class Slicer<T> implements Iterator<T> {
+	private final Grid grid;
+	private int rowNumber = 0;
+	private final RowConverter<T> rowConverter;
+
+	public Slicer(Grid grid, RowConverter<T> rowConverter) {
+		this.grid = grid;
+		this.rowConverter = rowConverter;
 	}
 
-	private static Grid gridFromCsvFile(String fileName) throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(fileName));
-		ArrayList<List<String>> cells = new ArrayList<List<String>>();
-		String[] row;
-		while((row = reader.readNext()) != null) {
-			cells.add(Arrays.asList(row));
-		}
-		return new Grid(cells);
+	@Override
+	public boolean hasNext() {
+		return rowNumber < grid.numberOfRows();
+	}
+
+	@Override
+	public T next() {
+		return rowConverter.convertRow(grid.row(rowNumber++));
+	}
+
+	@Override
+	public void remove() {
+		throw new NotImplementedException();
+	}
+
+	public static SlicerBuilder slice(String fileName) throws IOException {
+		return new SlicerBuilder(fileName);
+	}
+	
+	public static SlicerBuilder slice(Grid grid) {
+		return new SlicerBuilder(grid);
 	}
 }

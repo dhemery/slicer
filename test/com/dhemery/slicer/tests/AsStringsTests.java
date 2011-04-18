@@ -11,31 +11,31 @@ import org.junit.Test;
 
 import static com.dhemery.slicer.Slicer.slice;
 
-import com.dhemery.slicer.util.CsvCreator;
+import com.dhemery.slicer.util.CsvTmpFileCreator;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 public class AsStringsTests {
-	private String excelFileName;
-	private String[][] spreadsheetValues;
+	private String csvFile;
+	private String[][] csvValues;
 	
 	@Before
 	public void setUp() throws FileNotFoundException, IOException, SecurityException, NoSuchMethodException {
-		spreadsheetValues = new String[][] {
+		csvValues = new String[][] {
 			{"a1", "false", "1.1", "101", },
 			{"a2", "true",  "2.2", "202", },
 			{"a3", "false", "3.3", "303", },
 			{"a4", "true",  "4.4", "404", },
 		};
-		excelFileName = CsvCreator.createCsvFile(spreadsheetValues);
+		csvFile = CsvTmpFileCreator.create(csvValues);
 	}
 
 	@Test
 	public void yieldsEveryRow() throws FileNotFoundException, IOException {
-		Iterator<List<String>> rows = slice(excelFileName).asStrings();
+		Iterator<List<String>> rows = slice(csvFile).asStrings();
 		
-		for(int rowNumber = 0 ; rowNumber < spreadsheetValues.length ; rowNumber++) {
+		for(int rowNumber = 0 ; rowNumber < csvValues.length ; rowNumber++) {
 			rows.next();
 		}
 		assertThat(rows.hasNext(), is(false));
@@ -43,11 +43,11 @@ public class AsStringsTests {
 
 	@Test
 	public void retrievedValuesMatchSpreadsheetValues() throws FileNotFoundException, IOException {
-		Iterator<List<String>> rows = slice(excelFileName).asStrings();
+		Iterator<List<String>> rows = slice(csvFile).asStrings();
 		
-		for(int rowNumber = 0 ; rowNumber < spreadsheetValues.length ; rowNumber++) {
+		for(int rowNumber = 0 ; rowNumber < csvValues.length ; rowNumber++) {
 			List<String> actualValues = rows.next();
-			List<String> expectedValues = Arrays.asList(spreadsheetValues[rowNumber]);
+			List<String> expectedValues = Arrays.asList(csvValues[rowNumber]);
 			assertThat(actualValues, is(expectedValues));
 		}
 	}

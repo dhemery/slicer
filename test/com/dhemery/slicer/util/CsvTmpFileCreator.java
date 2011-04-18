@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-public class CsvCreator {
-	public static String createCsvFile(String[][] cellValues) throws IOException {
+public class CsvTmpFileCreator {
+	public static String create(String[][] cellValues) throws IOException {
 		File file = createTmpFile();
 		writeValues(file, cellValues);
 		return file.getAbsolutePath();
