@@ -1,4 +1,4 @@
-package com.dhemery.slicer.internal;
+package com.dhemery.slicer.converters;
 
 import java.util.List;
 

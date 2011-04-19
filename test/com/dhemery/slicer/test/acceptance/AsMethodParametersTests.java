@@ -9,7 +9,7 @@ import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.dhemery.slicer.Slicer.slice;
+import static com.dhemery.slicer.Slicer.*;
 
 import com.dhemery.slicer.test.util.CsvTmpFileCreator;
 

@@ -1,4 +1,4 @@
-package com.dhemery.slicer.internal;
+package com.dhemery.slicer.converters;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MethodParameterConverter implements RowConverter<Object[]> {
+public class MethodParameterRowConverter implements RowConverter<Object[]> {
 	private final Class<?>[] typesByColumn;
 	private final Map<Class<?>,ValueConverter> convertersByType = createConverters();
 
-	public MethodParameterConverter(Method method) {
+	public MethodParameterRowConverter(Method method) {
 		typesByColumn = method.getParameterTypes();
 	}
 	
@@ -27,42 +27,17 @@ public class MethodParameterConverter implements RowConverter<Object[]> {
 
 	public Object convertValue(String textValue, int columnNumber) {
 		Class<?> type = typesByColumn[columnNumber];
-		return convertersByType.get(type).valueOf(textValue);
-	}
-
-	public interface ValueConverter {
-		Object valueOf(String cell);
+		ValueConverter converter = convertersByType.get(type);
+		return converter.valueOf(textValue);
 	}
 
 	private static Map<Class<?>,ValueConverter> createConverters() {
+		ValueConverter booleanConverter = new BooleanValueConverter();
+		ValueConverter doubleConverter = new DoubleValueConverter();
+		ValueConverter integerConverter = new IntegerValueConverter();
+		ValueConverter stringConverter = new StringValueConverter();
+
 		Map<Class<?>,ValueConverter> converters = new HashMap<Class<?>,ValueConverter>();
-		ValueConverter booleanConverter = new ValueConverter() {
-			@Override
-			public Object valueOf(String text) {
-				return Boolean.parseBoolean(text);
-			}		
-		};
-
-		ValueConverter doubleConverter = new ValueConverter() {
-			@Override
-			public Object valueOf(String text) {
-				return Double.parseDouble(text);
-			}		
-		};
-
-		ValueConverter integerConverter = new ValueConverter() {
-			@Override
-			public Object valueOf(String text) {
-				return Integer.parseInt(text);
-			}		
-		};
-
-		ValueConverter stringConverter = new ValueConverter() {
-			@Override
-			public Object valueOf(String text) {
-				return text;
-			}		
-		};
 		converters.put(boolean.class, booleanConverter);
 		converters.put(Boolean.class, booleanConverter);
 		converters.put(double.class, doubleConverter);
