@@ -20,6 +20,7 @@
 	</path>
 	
 	<path id="compile-test-classpath">
+		<pathelement location="${slicer-jar}" />
 		<fileset dir="${lib-dir}" includes="*.jar"/>
 	</path>
 
