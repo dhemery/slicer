@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="all">
-	<propertyfile file="build.number" />
+	<propertyfile file="version.number" />
 	<property name="bin-dir" location="bin" />
 	<property name="dist-dir" location="dist" />
 	<property name="jar-dir" location="jar" />
@@ -54,7 +54,7 @@
 	</target>
 	
 	<target name="dist" depends="test">
-		<buildnumber/>
+		<buildnumber file="version.number"/>
 		<property name="version" value="0.1.${build.number}" />
 		<copy file="${slicer-jar}" toFile="${dist-dir}/slicer-${version}.jar" />
 	</target>
@@ -64,6 +64,7 @@
 	</target>
 
 	<target name="jar" depends="compile-slicer">
+		<mkdir dir="${jar-dir}" />
 		<unjar src="${opencsv-lib}" dest="${bin-dir}" />
 	    <jar destfile="${slicer-jar}"
 	         basedir="${bin-dir}"
