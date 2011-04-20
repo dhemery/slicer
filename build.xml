@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="all">
-	<propertyfile file="version.number" />
 	<property name="bin-dir" location="bin" />
 	<property name="dist-dir" location="dist" />
 	<property name="jar-dir" location="jar" />
