@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.dhemery.slicer.Grid;
 
-public class GridTests {
+public class AGrid {
 	String[][] stringArrays = new String[][] {
 		{ "a", "b", "c", "d", },
 		{ "1", "3", "5", "42", "42 again", },
@@ -40,5 +40,10 @@ public class GridTests {
 		for(int i = 0 ; i < stringArrays.length ; i++) {
 			assertThat(grid.row(i), is(Arrays.asList(stringArrays[i])));
 		}
+	}
+	
+	@Test
+	public void knowsHowManyRowsItHas() {
+		assertThat(new Grid(stringArrays).numberOfRows(), is(stringArrays.length));
 	}
 }

@@ -77,6 +77,7 @@
 			<batchtest fork="yes" todir="${test-report-dir}">
 				<fileset dir="${test-bin-dir}">
 					<include name="com/dhemery/slicer/test/acceptance/**/*"/>
+					<include name="com/dhemery/slicer/test/unit/**/*"/>
 				</fileset>
 				<formatter type="brief" usefile="no" />
 			</batchtest>
