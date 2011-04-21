@@ -1,6 +1,7 @@
 package com.dhemery.slicer;
 
 import java.util.Iterator;
+import java.util.List;
 
 import com.dhemery.slicer.converters.RowConverter;
 
@@ -8,23 +9,22 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 public class GridSlicer<T> implements Iterator<T> {
-	private final Grid grid;
-	private int rowNumber = 0;
 	private final RowConverter<T> rowConverter;
+	private final Iterator<List<String>> rowSource;
 
-	public GridSlicer(Grid grid, RowConverter<T> rowConverter) {
-		this.grid = grid;
+	public GridSlicer(Iterator<List<String>> rowSource, RowConverter<T> rowConverter) {
+		this.rowSource = rowSource;
 		this.rowConverter = rowConverter;
 	}
 
 	@Override
 	public boolean hasNext() {
-		return rowNumber < grid.numberOfRows();
+		return rowSource.hasNext();
 	}
 
 	@Override
 	public T next() {
-		return rowConverter.convertRow(grid.row(rowNumber++));
+		return rowConverter.convertRow(rowSource.next());
 	}
 
 	@Override

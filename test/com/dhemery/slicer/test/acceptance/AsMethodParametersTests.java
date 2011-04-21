@@ -12,6 +12,7 @@ import org.junit.Test;
 import static com.dhemery.slicer.Slicer.*;
 
 import com.dhemery.slicer.test.util.CsvTmpFileCreator;
+import com.dhemery.slicer.test.util.MethodFinder;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -19,7 +20,6 @@ import static org.hamcrest.CoreMatchers.*;
 public class AsMethodParametersTests {
 	private String csvFile;
 	private String[][] csvValues;
-	private Class<?>[] methodParameterTypes;
 	public Method targetMethod;
 	
 	@Before
@@ -31,15 +31,7 @@ public class AsMethodParametersTests {
 			{"a4", "true",  "true",  "4.4", "44.44", "404", "44044", },
 		};
 		csvFile = CsvTmpFileCreator.create(csvValues);
-		targetMethod = findMethod("theMethod");
-		methodParameterTypes = targetMethod.getParameterTypes();
-	}
-
-	private Method findMethod(String targetName) {
-		for(Method method : getClass().getMethods()) {
-			if(method.getName().equals(targetName)) return method;
-		}
-		return null;
+		targetMethod = MethodFinder.find(this, "theMethod");
 	}
 
 	public void theMethod(String S, boolean b, Boolean B, double d, Double D, int i, Integer I) {}
@@ -59,7 +51,7 @@ public class AsMethodParametersTests {
 		Iterator<Object[]> rows = slice(csvFile).asParametersFor(targetMethod);
 		
 		for(int rowNumber = 0 ; rowNumber < csvValues.length ; rowNumber++) {
-			assertThat(rows.next().length, is(methodParameterTypes.length));
+			assertThat(rows.next().length, is(targetMethod.getParameterTypes().length));
 		}
 		assertThat(rows.hasNext(), is(false));
 	}
