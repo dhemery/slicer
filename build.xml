@@ -1,86 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project default="all">
-	<property name="bin-dir" location="bin" />
-	<property name="dist-dir" location="dist" />
-	<property name="jar-dir" location="jar" />
-	<property name="lib-dir" location="lib" />
-	<property name="slicer-jar" location="${jar-dir}/slicer.jar" />
-	<property name="src-dir" location="src" />
-	<property name="test-bin-dir" location="testbin" />
-	<property name="test-src-dir" location="test" />
-	<property name="test-report-dir" location="reports" />
-	<property name="junit-lib" location="${lib-dir}/junit-dep-4.9b2.jar" />
-	<property name="hamcrest-core-lib" location="${lib-dir}/hamcrest-core-1.3.0RC1.jar" />
-	<property name="hamcrest-library-lib" location="${lib-dir}/hamcrest-library-1.3.0RC1.jar" />
-	<property name="opencsv-lib" location="${lib-dir}/opencsv-2.3.jar" />
+<project name="slicer" default="test">
+	<property name="src.dir" location="src" />
+	<property name="test.src.dir" location="test" />
 
-	<path id="compile-slicer-classpath">
-		<pathelement location="${opencsv-lib}" />
-	</path>
+	<property name="lib.dir" location="lib" />
+	<property name="build.lib.dir" location="${lib.dir}/main" />
+	<property name="test.lib.dir" location="${lib.dir}/test" />
+
+	<property name="target" location="target" />
+	<property name="bin.dir" location="${target}/bin" />
+	<property name="dist.bin.dir" location="${target}/dist" />
+	<property name="test.bin.dir" location="${target}/test" />
+
+	<property name="build.jar" value="${dist.bin.dir}/${ant.project.name}.jar" />
+
+	<property name="report.dir" location="reports" />
+	<property name="dist.dir" location="dist" />
+
+	<fileset id="build.libs" dir="${build.lib.dir}" includes="**/*.jar" />
 	
-	<path id="compile-test-classpath">
-		<pathelement location="${slicer-jar}" />
-		<fileset dir="${lib-dir}" includes="*.jar"/>
+	<path id="build.classpath">
+		<fileset refid="build.libs" />
 	</path>
 
-	<path id="run-test-classpath">
-		<fileset dir="${lib-dir}" includes="*.jar"/>
-		<pathelement location="${slicer-jar}" />
-		<pathelement location="${test-bin-dir}" />
+	<path id="test.classpath">
+		<path refid="build.classpath" />
+		<pathelement location="${bin.dir}" />
+		<fileset dir="${test.lib.dir}" />
+		<pathelement location="${test.bin.dir}" />
 	</path>
 
-	<target name="all" depends="test" />
-
+	<fileset id="test.classes" dir="${test.bin.dir}">
+		<include name="**/*.class" />
+		<exclude name="**/util/*.class"/>
+	</fileset>
+	
 	<target name="clean">
-		<delete dir="${bin-dir}" quiet="true" />
-		<delete dir="${jar-dir}" quiet="true" />
-		<delete dir="${test-bin-dir}" quiet="true" />
-		<delete dir="${test-report-dir}" quiet="true" />
-	</target>
-	
-	<target name="compile-slicer">
-		<mkdir dir="${bin-dir}" />
-		<javac srcdir="${src-dir}" destdir="${bin-dir}" includeAntRuntime="false">
-			<classpath refid="compile-slicer-classpath" />
-		</javac>
-	</target>
-
-	<target name="compile-tests">
-		<mkdir dir="${test-bin-dir}" />
-		<javac srcdir="${test-src-dir}" destdir="${test-bin-dir}" includeAntRuntime="false">
-			<classpath refid="compile-test-classpath" />
-		</javac>
-	</target>
-	
-	<target name="dist" depends="test">
-		<buildnumber file="version.number"/>
-		<property name="version" value="0.1.${build.number}" />
-		<copy file="${slicer-jar}" toFile="${dist-dir}/slicer-${version}.jar" />
+		<delete dir="${target}" quiet="true" />
+		<delete dir="${report.dir}" quiet="true" />
 	</target>
 
 	<target name="init">
 		<tstamp />
 	</target>
 
-	<target name="jar" depends="compile-slicer">
-		<mkdir dir="${jar-dir}" />
-		<unjar src="${opencsv-lib}" dest="${bin-dir}" />
-	    <jar destfile="${slicer-jar}"
-	         basedir="${bin-dir}"
-	         includes="**/*.class"
-	         />
+	<target name="build" depends="init">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" includeAntRuntime="false">
+			<classpath refid="build.classpath" />
+		</javac>
+		<unjar dest="${bin.dir}">
+			<fileset refid="build.libs" />
+		</unjar>
+		<jar basedir="${bin.dir}" destfile="${build.jar}" />
 	</target>
 
-	<target name="test" depends="jar,compile-tests">
+	<target name="test" depends="build">
+		<mkdir dir="${test.bin.dir}" />
+		<javac srcdir="${test.src.dir}" destdir="${test.bin.dir}" includeAntRuntime="false">
+			<classpath refid="test.classpath" />
+		</javac>
 		<junit>
-			<classpath refid="run-test-classpath" />
+			<classpath refid="test.classpath" />
 			<batchtest fork="yes" todir="${test-report-dir}">
-				<fileset dir="${test-bin-dir}">
-					<include name="com/dhemery/slicer/test/acceptance/**/*"/>
-					<include name="com/dhemery/slicer/test/unit/**/*"/>
-				</fileset>
+				<fileset refid="test.classes" />
 				<formatter type="brief" usefile="no" />
 			</batchtest>
 		</junit>
+	</target>
+
+	<target name="dist" depends="test">
+		<mkdir dir="${dist.dir}" />
+		<buildnumber file="version.number"/>
+		<property name="version" value="0.1.${build.number}" />
+		<property name="dist.jar.name" value="${ant.project.name}-${version}.jar" />
+		<copy file="${build.jar}" toFile="${dist.dir}/${dist.jar.name}" />
 	</target>
 </project>
