@@ -38,17 +38,6 @@
 		<include name="com/dhemery/slicer/test/unit/**/*.class"/>
 	</fileset>
 
-	<target name="acceptance.tests" depends="-compile.tests">
-		<echo>Running acceptance tests</echo>
-		<junit haltonfailure="true">
-			<classpath refid="test.classpath" />
-			<batchtest fork="no" todir="${report.dir}/xml">
-				<fileset refid="acceptance.test.classes" />
-				<formatter type="xml" usefile="yes" />
-			</batchtest>
-		</junit>
-	</target>
-	
 	<target name="build" depends="-init">
 		<echo>Compiling ${ant.project.name}</echo>
 		<mkdir dir="${bin.dir}" />
@@ -87,16 +76,12 @@
 		<delete dir="${report.dir}/xml" quiet="true" />
 	</target>
 
+	<target name="acceptance.tests" depends="-compile.tests">
+		<run.tests classes="acceptance.test.classes" message="Running acceptance tests" />
+	</target>
+	
 	<target name="unit.tests" depends="-compile.tests">
-		<echo>Running unit tests</echo>
-		<mkdir dir="${report.dir}/xml" />
-		<junit haltonfailure="true">
-			<classpath refid="test.classpath" />
-			<batchtest fork="no" todir="${report.dir}/xml">
-				<fileset refid="unit.test.classes" />
-				<formatter type="xml" usefile="yes" />
-			</batchtest>
-		</junit>
+		<run.tests classes="unit.test.classes" message="Running unit tests" />
 	</target>
 	
 	<target name="-compile.tests" depends="build">
@@ -109,4 +94,20 @@
 	<target name="-init">
 		<tstamp />
 	</target>
+
+	<macrodef name="run.tests">
+		<attribute name="message" />
+		<attribute name="classes" />
+		<sequential>
+			<echo>@{message}</echo>
+			<mkdir dir="${report.dir}/xml" />
+			<junit haltonfailure="true">
+				<classpath refid="test.classpath" />
+				<batchtest fork="no" todir="${report.dir}/xml">
+					<fileset refid="@{classes}" />
+					<formatter type="xml" usefile="yes" />
+				</batchtest>
+			</junit>
+		</sequential>
+	</macrodef>	
 </project>
