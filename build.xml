@@ -51,6 +51,7 @@
 		<unjar dest="${bin.dir}">
 			<fileset refid="build.libs" />
 		</unjar>
+		<mkdir dir="${dist.bin.dir}" />
 		<jar basedir="${bin.dir}" destfile="${build.jar}" />
 	</target>
 
