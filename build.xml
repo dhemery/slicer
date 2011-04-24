@@ -31,7 +31,6 @@
 	</path>
 
 	<fileset id="test.classes" dir="${test.bin.dir}">
-		<include name="**/*.class" />
 		<exclude name="**/util/*.class"/>
 	</fileset>
 	
