@@ -59,13 +59,21 @@
 		<javac srcdir="${test.src.dir}" destdir="${test.bin.dir}" includeAntRuntime="false">
 			<classpath refid="test.classpath" />
 		</javac>
+		<mkdir dir="${report.dir}/xml" />
 		<junit>
 			<classpath refid="test.classpath" />
-			<batchtest fork="yes" todir="${test-report-dir}">
+			<batchtest fork="no" todir="${report.dir}/xml">
 				<fileset refid="test.classes" />
-				<formatter type="brief" usefile="no" />
+				<formatter type="xml" usefile="yes" />
 			</batchtest>
 		</junit>
+		<junitreport todir="${report.dir}">
+			<fileset dir="${report.dir}/xml">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${report.dir}"/>
+		</junitreport>
+		<delete dir="${report.dir}/xml" />
 	</target>
 
 	<target name="dist" depends="test">
