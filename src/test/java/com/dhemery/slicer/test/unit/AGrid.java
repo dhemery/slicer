@@ -51,14 +51,14 @@ public class AGrid {
 	public void removeHeaderCreatesANewGridWithoutTheHeaderRow() {
 		String[][] withHeader = {
 				{ "col 1",    "col 2",    "col3",     },
-				{ "cell 1 1", "cell 2 1", "cell 3 1", },
-				{ "cell 1 2", "cell 2 2", "cell 3 2", },
-				{ "cell 1 3", "cell 2 3", "cell 3 3", },
+				{ "cell 1 1", "cell 1 2", "cell 1 3", },
+				{ "cell 2 1", "cell 2 2", "cell 2 3", },
+				{ "cell 3 1", "cell 3 2", "cell 3 3", },
 		};
 		String[][] withoutHeader = {
-				{ "cell 1 1", "cell 2 1", "cell 3 1", },
-				{ "cell 1 2", "cell 2 2", "cell 3 2", },
-				{ "cell 1 3", "cell 2 3", "cell 3 3", },
+				{ "cell 1 1", "cell 1 2", "cell 1 3", },
+				{ "cell 2 1", "cell 2 2", "cell 2 3", },
+				{ "cell 3 1", "cell 3 2", "cell 3 3", },
 		};
 		Grid gridWithHeader = new Grid(withHeader);
 		Grid gridWithoutHeader = new Grid(withoutHeader);
@@ -67,23 +67,41 @@ public class AGrid {
 	}
 	
 	@Test
-	public void selectRows() {
+	public void rows() {
 		String[][] original = {
-				{ "cell 1 1", "cell 2 1", "cell 3 1", },
-				{ "cell 1 2", "cell 2 2", "cell 3 2", },
-				{ "cell 1 3", "cell 2 3", "cell 3 3", },
-				{ "cell 1 4", "cell 2 4", "cell 3 4", },
-				{ "cell 1 5", "cell 2 5", "cell 3 5", },
+				{ "cell 1 1", "cell 1 2", "cell 1 3", },
+				{ "cell 2 1", "cell 2 2", "cell 2 3", },
+				{ "cell 3 1", "cell 3 2", "cell 3 3", },
+				{ "cell 4 1", "cell 4 2", "cell 4 3", },
+				{ "cell 5 1", "cell 5 2", "cell 5 3", },
 		};
 		String[][] selected = {
-				{ "cell 1 1", "cell 2 1", "cell 3 1", },
-				{ "cell 1 4", "cell 2 4", "cell 3 4", },
-				{ "cell 1 5", "cell 2 5", "cell 3 5", },
+				{ "cell 1 1", "cell 1 2", "cell 1 3", },
+				{ "cell 4 1", "cell 4 2", "cell 4 3", },
+				{ "cell 5 1", "cell 5 2", "cell 5 3", },
 		};
 		Grid originalGrid = new Grid(original);
 		Grid selectedRowsGrid = new Grid(selected);
 
 		assertThat(originalGrid.rows(0, 3, 4), is(selectedRowsGrid));
+	}
+	
+	@Test
+	public void columns() {
+		String[][] original = {
+				{ "cell 1 1", "cell 1 2", "cell 1 3", "cell 1 4", "cell 1 5", },
+				{ "cell 2 1", "cell 2 2", "cell 2 3", "cell 2 4", "cell 2 5", },
+				{ "cell 3 1", "cell 3 2", "cell 3 3", "cell 3 4", "cell 3 5", },
+		};
+		String[][] selected = {
+				{ "cell 1 1", "cell 1 2", "cell 1 5", },
+				{ "cell 2 1", "cell 2 2", "cell 2 5", },
+				{ "cell 3 1", "cell 3 2", "cell 3 5", },
+		};
+		Grid originalGrid = new Grid(original);
+		Grid selectedColumnsGrid = new Grid(selected);
+		
+		assertThat(originalGrid.columns(0, 1, 4), is(selectedColumnsGrid));
 	}
 	
 	
