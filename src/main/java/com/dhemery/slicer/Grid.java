@@ -17,12 +17,12 @@ public class Grid {
 		}
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((cells == null) ? 0 : cells.hashCode());
-		return result;
+	public Grid columns(Integer... selectedColumns) {
+		List<List<String>> newCells = new ArrayList<List<String>>();
+		for(int i = 0 ; i < cells.size() ; i++) {
+			newCells.add(selectStrings(row(i), selectedColumns));
+		}
+		return new Grid(newCells);
 	}
 
 	@Override
@@ -35,12 +35,16 @@ public class Grid {
 		return true;
 	}
 
-	public int numberOfRows() {
-		return cells.size();
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cells == null) ? 0 : cells.hashCode());
+		return result;
 	}
 
-	public List<String> row(int i) {
-		return cells.get(i);
+	public int numberOfRows() {
+		return cells.size();
 	}
 
 	public Grid removeHeader() {
@@ -51,18 +55,14 @@ public class Grid {
 		return new Grid(newCells);
 	}
 
+	public List<String> row(int i) {
+		return cells.get(i);
+	}
+
 	public Grid rows(Integer... selectedRows) {
 		List<List<String>> newCells = new ArrayList<List<String>>();
 		for(int row : selectedRows) {
 			newCells.add(row(row));
-		}
-		return new Grid(newCells);
-	}
-
-	public Grid columns(Integer... selectedColumns) {
-		List<List<String>> newCells = new ArrayList<List<String>>();
-		for(int i = 0 ; i < cells.size() ; i++) {
-			newCells.add(selectStrings(row(i), selectedColumns));
 		}
 		return new Grid(newCells);
 	}
@@ -73,5 +73,39 @@ public class Grid {
 			newRow.add(strings.get(column));
 		}
 		return newRow;
+	}
+
+	public Grid skipColumns(Integer... skipped) {
+		List<Integer> skippedColumns = Arrays.asList(skipped);
+		List<List<String>> newCells = new ArrayList<List<String>>();
+		for(int i = 0 ; i < cells.size() ; i++) {
+			newCells.add(skipStrings(row(i), skippedColumns));
+		}
+		return new Grid(newCells);
+	}
+
+	public Grid skipRows(Integer...skipped) {
+		List<Integer> skippedRows = Arrays.asList(skipped);
+		List<List<String>> newCells = new ArrayList<List<String>>();
+		for(int row = 0 ; row < cells.size(); row++) {
+			if(!skippedRows.contains(row)) newCells.add(row(row));
+		}
+		return new Grid(newCells);
+	}
+
+	private List<String> skipStrings(List<String> strings, List<Integer> skippedColumns) {
+		List<String> newRow = new ArrayList<String>();
+		for(int column = 0 ; column < strings.size() ; column++) {		
+			if(!skippedColumns.contains(column)) newRow.add(strings.get(column));
+		}
+		return newRow;
+	}
+
+	public List<String> column(int column) {
+		List<String> strings = new ArrayList<String>();
+		for(List<String> row : cells) {
+			strings.add(row.get(column));
+		}
+		return strings;
 	}
 }

@@ -33,7 +33,7 @@ public class AsStringsTests {
 
 	@Test
 	public void yieldsEveryRow() throws FileNotFoundException, IOException {
-		Iterator<List<String>> rows = slice(csvFile).asStrings();
+		Iterator<List<String>> rows = slice(csvFile).asStringLists();
 		
 		for(int rowNumber = 0 ; rowNumber < csvValues.length ; rowNumber++) {
 			rows.next();
@@ -43,7 +43,7 @@ public class AsStringsTests {
 
 	@Test
 	public void retrievedValuesMatchSpreadsheetValues() throws FileNotFoundException, IOException {
-		Iterator<List<String>> rows = slice(csvFile).asStrings();
+		Iterator<List<String>> rows = slice(csvFile).asStringLists();
 		
 		for(int rowNumber = 0 ; rowNumber < csvValues.length ; rowNumber++) {
 			List<String> actualValues = rows.next();

@@ -1,30 +1,30 @@
 package com.dhemery.slicer;
 
 import java.util.Iterator;
-import java.util.List;
 
 import com.dhemery.slicer.converters.RowConverter;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
-public class GridSlicer<T> implements Iterator<T> {
+public class GridRowIterator<T> implements Iterator<T> {
+	private final Grid grid;
+	private int nextRow = 0;
 	private final RowConverter<T> rowConverter;
-	private final Iterator<List<String>> rowSource;
 
-	public GridSlicer(Iterator<List<String>> rowSource, RowConverter<T> rowConverter) {
-		this.rowSource = rowSource;
+	public GridRowIterator(Grid grid, RowConverter<T> rowConverter) {
+		this.grid = grid;
 		this.rowConverter = rowConverter;
 	}
 
 	@Override
 	public boolean hasNext() {
-		return rowSource.hasNext();
+		return nextRow < grid.numberOfRows();
 	}
 
 	@Override
 	public T next() {
-		return rowConverter.convertRow(rowSource.next());
+		return rowConverter.convertRow(grid.row(nextRow++));
 	}
 
 	@Override

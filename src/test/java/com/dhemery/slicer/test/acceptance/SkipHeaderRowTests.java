@@ -26,11 +26,11 @@ public class SkipHeaderRowTests {
 			{"anna", "Berwick",		"ME",		"03901",	},
 			{"dude", "Somersworth",	"NH",		"03878",	},
 		};
-	}
+	} 
 	
 	@Test
 	public void skipsTheHeaderRow() throws IOException {
-		Iterator<List<String>> rows = slice(csvValues).skipHeaderRow().asStrings();
+		Iterator<List<String>> rows = slice(csvValues).skipHeaderRow().asStringLists();
 		int firstRowAfterHeader = 1;
 		for(int i = firstRowAfterHeader ; i < csvValues.length ; i++) {
 			assertThat(rows.next(), is(Arrays.asList(csvValues[i])));

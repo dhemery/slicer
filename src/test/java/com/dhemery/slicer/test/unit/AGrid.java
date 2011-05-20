@@ -104,5 +104,59 @@ public class AGrid {
 		assertThat(originalGrid.columns(0, 1, 4), is(selectedColumnsGrid));
 	}
 	
+	@Test
+	public void skipRows() {
+		String[][] original = {
+				{ "cell 1 1", "cell 1 2", "cell 1 3", },
+				{ "cell 2 1", "cell 2 2", "cell 2 3", },
+				{ "cell 3 1", "cell 3 2", "cell 3 3", },
+				{ "cell 4 1", "cell 4 2", "cell 4 3", },
+				{ "cell 5 1", "cell 5 2", "cell 5 3", },
+		};
+		String[][] skipped = {
+				{ "cell 2 1", "cell 2 2", "cell 2 3", },
+				{ "cell 3 1", "cell 3 2", "cell 3 3", },
+		};
+		Grid originalGrid = new Grid(original);
+		Grid skippedRowsGrid = new Grid(skipped);
+
+		assertThat(originalGrid.skipRows(0, 3, 4), is(skippedRowsGrid));
+	}	
+
+	@Test
+	public void skipColumns() {
+		String[][] original = {
+				{ "cell 1 1", "cell 1 2", "cell 1 3", "cell 1 4", "cell 1 5", },
+				{ "cell 2 1", "cell 2 2", "cell 2 3", "cell 2 4", "cell 2 5", },
+				{ "cell 3 1", "cell 3 2", "cell 3 3", "cell 3 4", "cell 3 5", },
+		};
+		String[][] skipped = {
+				{ "cell 1 1", "cell 1 2", "cell 1 5", },
+				{ "cell 2 1", "cell 2 2", "cell 2 5", },
+				{ "cell 3 1", "cell 3 2", "cell 3 5", },
+		};
+		Grid originalGrid = new Grid(original);
+		Grid skippedColumnsGrid = new Grid(skipped);
+		
+		assertThat(originalGrid.skipColumns(2, 3), is(skippedColumnsGrid));
+	}
+
+	@Test
+	public void column() {
+		String[][] original = {
+				{ "cell 1 1", "cell 1 2", "cell 1 3", },
+				{ "cell 2 1", "cell 2 2", "cell 2 3", },
+				{ "cell 3 1", "cell 3 2", "cell 3 3", },
+		};
+		String[] columnTwo = {
+				"cell 1 3",
+				"cell 2 3",
+				"cell 3 3",
+		};
+		Grid grid = new Grid(original);
+		List<String> columnTwoStrings = Arrays.asList(columnTwo);
+
+		assertThat(grid.column(2), is(columnTwoStrings));
+	}
 	
 }
