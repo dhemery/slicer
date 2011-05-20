@@ -65,4 +65,26 @@ public class AGrid {
 
 		assertThat(gridWithHeader.removeHeader(), is(gridWithoutHeader));
 	}
+	
+	@Test
+	public void selectRows() {
+		String[][] original = {
+				{ "cell 1 1", "cell 2 1", "cell 3 1", },
+				{ "cell 1 2", "cell 2 2", "cell 3 2", },
+				{ "cell 1 3", "cell 2 3", "cell 3 3", },
+				{ "cell 1 4", "cell 2 4", "cell 3 4", },
+				{ "cell 1 5", "cell 2 5", "cell 3 5", },
+		};
+		String[][] selected = {
+				{ "cell 1 1", "cell 2 1", "cell 3 1", },
+				{ "cell 1 4", "cell 2 4", "cell 3 4", },
+				{ "cell 1 5", "cell 2 5", "cell 3 5", },
+		};
+		Grid originalGrid = new Grid(original);
+		Grid selectedRowsGrid = new Grid(selected);
+
+		assertThat(originalGrid.rows(0, 3, 4), is(selectedRowsGrid));
+	}
+	
+	
 }

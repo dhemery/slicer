@@ -50,4 +50,13 @@ public class Grid {
 		}
 		return new Grid(newCells);
 	}
+
+	public Grid rows(Integer... selection) {
+		List<Integer> selectedRows = Arrays.asList(selection);
+		List<List<String>> newCells = new ArrayList<List<String>>();
+		for(int i = 0 ; i < cells.size() ; i++) {
+			if(selectedRows.contains(i)) newCells.add(row(i));
+		}
+		return new Grid(newCells);
+	}
 }
