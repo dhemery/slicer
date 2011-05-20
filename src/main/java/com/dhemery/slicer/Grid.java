@@ -17,11 +17,37 @@ public class Grid {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cells == null) ? 0 : cells.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		Grid other = (Grid) obj;
+		if (!cells.equals(other.cells)) return false;
+		return true;
+	}
+
 	public int numberOfRows() {
 		return cells.size();
 	}
 
 	public List<String> row(int i) {
 		return cells.get(i);
+	}
+
+	public Grid removeHeader() {
+		List<List<String>> newCells = new ArrayList<List<String>>();
+		for(int i = 1 ; i < cells.size() ; i++) {
+			newCells.add(row(i));
+		}
+		return new Grid(newCells);
 	}
 }

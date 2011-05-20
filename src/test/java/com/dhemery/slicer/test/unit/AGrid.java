@@ -46,4 +46,23 @@ public class AGrid {
 	public void knowsHowManyRowsItHas() {
 		assertThat(new Grid(stringArrays).numberOfRows(), is(stringArrays.length));
 	}
+	
+	@Test
+	public void removeHeaderCreatesANewGridWithoutTheHeaderRow() {
+		String[][] withHeader = {
+				{ "col 1",    "col 2",    "col3",     },
+				{ "cell 1 1", "cell 2 1", "cell 3 1", },
+				{ "cell 1 2", "cell 2 2", "cell 3 2", },
+				{ "cell 1 3", "cell 2 3", "cell 3 3", },
+		};
+		String[][] withoutHeader = {
+				{ "cell 1 1", "cell 2 1", "cell 3 1", },
+				{ "cell 1 2", "cell 2 2", "cell 3 2", },
+				{ "cell 1 3", "cell 2 3", "cell 3 3", },
+		};
+		Grid gridWithHeader = new Grid(withHeader);
+		Grid gridWithoutHeader = new Grid(withoutHeader);
+
+		assertThat(gridWithHeader.removeHeader(), is(gridWithoutHeader));
+	}
 }
