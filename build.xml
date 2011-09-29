@@ -84,6 +84,7 @@
 		<echo>Building ${dist.jar.name}</echo>
 		<mkdir dir="${dist.dir}" />
 		<copy file="${build.jar}" toFile="${dist.dir}/${dist.jar.name}" />
+		<copy file="${built.libs.dir}/opencsv-2.3.jar" toDir="${dist.dir}" />
 	</target>
 
 	<target name="init">
