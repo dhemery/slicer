@@ -1,54 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="slicer" default="test">
+<project name="slicer" default="run.tests">
 	<property name="src.dir" location="src/main/java" />
 	<property name="test.src.dir" location="src/test/java" />
 
 	<property name="lib.dir" location="lib" />
-	<property name="build.lib.dir" location="${lib.dir}/main" />
+	<property name="compile.lib.dir" location="${lib.dir}/main" />
 	<property name="test.lib.dir" location="${lib.dir}/test" />
 
 	<property name="target" location="target" />
-	<property name="bin.dir" location="${target}/bin" />
-	<property name="dist.bin.dir" location="${target}/dist" />
-	<property name="test.bin.dir" location="${target}/test" />
+	<property name="built.libs.dir" location="${target}/libs" />
+	<property name="compiled.classes.dir" location="${target}/build" />
+	<property name="test.classes.dir" location="${target}/tests" />
 
-	<property name="build.jar" value="${dist.bin.dir}/${ant.project.name}.jar" />
+	<property name="build.jar" value="${built.libs.dir}/${ant.project.name}.jar" />
+
 
 	<property name="report.dir" location="reports" />
 	<property name="dist.dir" location="dist" />
 
-	<fileset id="build.libs" dir="${build.lib.dir}" includes="**/*.jar" />
-	
-	<path id="build.classpath">
-		<fileset refid="build.libs" />
+	<fileset id="compile.libs" dir="${compile.lib.dir}" />
+
+	<path id="compile.classpath">
+		<fileset refid="compile.libs" />
 	</path>
 
-	<path id="test.classpath">
-		<path refid="build.classpath" />
-		<pathelement location="${bin.dir}" />
+	<path id="compile.tests.classpath">
+		<pathelement location="${test.classes.dir}" />
+		<fileset dir="${built.libs.dir}" />
 		<fileset dir="${test.lib.dir}" />
+	</path>
+
+	<path id="run.tests.classpath">
+		<path refid="compile.tests.classpath" />
 		<pathelement location="${test.bin.dir}" />
 	</path>
 
-	<fileset id="acceptance.test.classes" dir="${test.bin.dir}">
+	<fileset id="acceptance.test.classes" dir="${test.classes.dir}">
 		<include name="com/dhemery/slicer/test/acceptance/**/*.class"/>
 	</fileset>
 
-	<fileset id="unit.test.classes" dir="${test.bin.dir}">
+	<fileset id="unit.test.classes" dir="${test.classes.dir}">
 		<include name="com/dhemery/slicer/test/unit/**/*.class"/>
 	</fileset>
 
-	<target name="build" depends="-init">
+	<target name="build" depends="build.jar, copy.build.libs" />
+
+	<target name="build.jar" depends="compile.classes">
+		<mkdir dir="${built.libs.dir}" />
+		<jar basedir="${compiled.classes.dir}" destfile="${build.jar}" />
+	</target>
+
+	<target name="compile.classes" depends="init">
 		<echo>Compiling ${ant.project.name}</echo>
-		<mkdir dir="${bin.dir}" />
-		<javac srcdir="${src.dir}" destdir="${bin.dir}" includeAntRuntime="false">
-			<classpath refid="build.classpath" />
+		<mkdir dir="${compiled.classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${compiled.classes.dir}" includeAntRuntime="false">
+			<classpath refid="compile.classpath" />
 		</javac>
-		<unjar dest="${bin.dir}">
-			<fileset refid="build.libs" />
-		</unjar>
-		<mkdir dir="${dist.bin.dir}" />
-		<jar basedir="${bin.dir}" destfile="${build.jar}" />
 	</target>
 
 	<target name="clean">
@@ -56,7 +63,21 @@
 		<delete dir="${report.dir}" quiet="true" />
 	</target>
 
-	<target name="dist" depends="test">
+	<target name="compile.tests" depends="build">
+		<mkdir dir="${test.classes.dir}" />
+		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" includeAntRuntime="false">
+			<classpath refid="run.tests.classpath" />
+		</javac>
+	</target>
+
+	<target name="copy.build.libs">
+		<mkdir dir="${built.libs.dir}" />
+		<copy todir="${built.libs.dir}">
+			<fileset refid="compile.libs" />
+		</copy>
+	</target>
+	
+	<target name="dist" depends="run.tests">
 		<buildnumber file="version.number"/>
 		<property name="version" value="0.1.${build.number}" />
 		<property name="dist.jar.name" value="${ant.project.name}-${version}.jar" />
@@ -65,7 +86,15 @@
 		<copy file="${build.jar}" toFile="${dist.dir}/${dist.jar.name}" />
 	</target>
 
-	<target name="test" depends="unit.tests,acceptance.tests">
+	<target name="init">
+		<tstamp />
+	</target>
+
+	<target name="run.acceptance.tests" depends="compile.tests">
+		<run.tests classes="acceptance.test.classes" message="Running acceptance tests" />
+	</target>
+	
+	<target name="run.tests" depends="run.unit.tests, run.acceptance.tests">
 		<echo>Creating test report</echo>
 		<junitreport todir="${report.dir}">
 			<fileset dir="${report.dir}/xml">
@@ -76,25 +105,10 @@
 		<delete dir="${report.dir}/xml" quiet="true" />
 	</target>
 
-	<target name="acceptance.tests" depends="-compile.tests">
-		<run.tests classes="acceptance.test.classes" message="Running acceptance tests" />
-	</target>
-	
-	<target name="unit.tests" depends="-compile.tests">
+	<target name="run.unit.tests" depends="compile.tests">
 		<run.tests classes="unit.test.classes" message="Running unit tests" />
 	</target>
 	
-	<target name="-compile.tests" depends="build">
-		<mkdir dir="${test.bin.dir}" />
-		<javac srcdir="${test.src.dir}" destdir="${test.bin.dir}" includeAntRuntime="false">
-			<classpath refid="test.classpath" />
-		</javac>
-	</target>
-
-	<target name="-init">
-		<tstamp />
-	</target>
-
 	<macrodef name="run.tests">
 		<attribute name="message" />
 		<attribute name="classes" />
@@ -102,7 +116,7 @@
 			<echo>@{message}</echo>
 			<mkdir dir="${report.dir}/xml" />
 			<junit haltonfailure="true">
-				<classpath refid="test.classpath" />
+				<classpath refid="run.tests.classpath" />
 				<batchtest fork="no" todir="${report.dir}/xml">
 					<fileset refid="@{classes}" />
 					<formatter type="xml" usefile="yes" />
