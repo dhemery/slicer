@@ -1,0 +1,10 @@
+apply plugin: 'java'
+
+defaultTasks 'build'
+
+dependencies {
+    compile fileTree(dir: 'lib/main', include: '*.jar')
+    testCompile fileTree(dir: 'lib/test', include: '*.jar')
+}
+
+version = '0.1.34'
