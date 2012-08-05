@@ -1,4 +1,4 @@
-package com.dhemery.slicer.test.unit;
+package com.dhemery.slicer.tests.unit;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.dhemery.slicer.Grid;
 import com.dhemery.slicer.GridReader;
-import com.dhemery.slicer.test.util.CsvTmpFileCreator;
+import com.dhemery.slicer.tests.util.CsvTmpFileCreator;
 
 public class AGridReader {
 	String[][] cells = {

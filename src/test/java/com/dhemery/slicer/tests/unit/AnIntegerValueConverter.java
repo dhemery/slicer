@@ -1,4 +1,4 @@
-package com.dhemery.slicer.test.unit;
+package com.dhemery.slicer.tests.unit;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

@@ -1,4 +1,4 @@
-package com.dhemery.slicer.test.acceptance;
+package com.dhemery.slicer.tests.acceptance;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import static com.dhemery.slicer.Slicer.*;
 
-import com.dhemery.slicer.test.util.CsvTmpFileCreator;
+import com.dhemery.slicer.tests.util.CsvTmpFileCreator;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;

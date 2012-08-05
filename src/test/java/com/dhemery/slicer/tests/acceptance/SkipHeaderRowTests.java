@@ -1,4 +1,4 @@
-package com.dhemery.slicer.test.acceptance;
+package com.dhemery.slicer.tests.acceptance;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

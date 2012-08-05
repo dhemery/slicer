@@ -1,11 +1,10 @@
-package com.dhemery.slicer.test.unit;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
+package com.dhemery.slicer.tests.unit;
 
 import com.dhemery.slicer.converters.BooleanValueConverter;
+import org.junit.Test;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ABooleanValueConverter {
 	private final BooleanValueConverter converter = new BooleanValueConverter();

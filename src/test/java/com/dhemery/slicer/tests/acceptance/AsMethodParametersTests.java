@@ -1,4 +1,9 @@
-package com.dhemery.slicer.test.acceptance;
+package com.dhemery.slicer.tests.acceptance;
+
+import com.dhemery.slicer.tests.util.CsvTmpFileCreator;
+import com.dhemery.slicer.tests.util.MethodFinder;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -6,16 +11,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import static com.dhemery.slicer.Slicer.*;
-
-import com.dhemery.slicer.test.util.CsvTmpFileCreator;
-import com.dhemery.slicer.test.util.MethodFinder;
-
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static com.dhemery.slicer.Slicer.slice;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class AsMethodParametersTests {
 	private String csvFile;
