@@ -1,1 +1,5 @@
 /target
+/.idea
+/slicer.iml
+/slicer.ipr
+/slicer.iws
